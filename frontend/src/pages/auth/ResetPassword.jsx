@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import TweetButton from "../../UI/button";
 import { connect } from "react-redux";
-import { reset_password } from "../../actions/auth";
+import { reset_password } from "../../store/actions/auth";
 
 const ResetPassword = ({ reset_password }) => {
   const [requestSent, setRequestSent] = useState(false);

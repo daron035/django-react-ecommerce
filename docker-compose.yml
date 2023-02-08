@@ -11,6 +11,7 @@ services:
         volumes:
             - static_volume:/app/backend/server/django_static
             - ./docker/nginx/development:/etc/nginx/conf.d
+            - media_volume:/app/backend/server/media
         depends_on: 
             - backend
     backend:
@@ -24,8 +25,10 @@ services:
         volumes:
             - .:/app
             - static_volume:/app/backend/server/django_static
+            - media_volume:/app/backend/server/media
         expose:
             - 8000        
 
 volumes:
     static_volume: {}
+    media_volume: {}

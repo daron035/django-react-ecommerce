@@ -35,7 +35,6 @@ export const checkAuthenticated = () => async (dispatch) => {
         body,
         config
       );
-      console.log(`${process.env.REACT_APP_API_URL}/api/auth/jwt/verify/`)
 
       // response from jwt/verify/
       if (res.data.code !== "token_not_valid") {
@@ -105,7 +104,6 @@ export const login = (email, password) => async (dispatch) => {
   try {
     const res = await axios.post(
       // `/api/auth/jwt/create/`,
-      // `${process.env.REACT_APP_API_URL}/api/auth/jwt/create/`, # proxy
       `${process.env.REACT_APP_API_URL}/api/auth/jwt/create/`,
       body,
       config
@@ -144,7 +142,7 @@ export const signup =
 
       dispatch({
         type: SIGNUP_SUCCESS,
-        // payload: res.data
+        // payload: res.data,
       });
     } catch (err) {
       dispatch({

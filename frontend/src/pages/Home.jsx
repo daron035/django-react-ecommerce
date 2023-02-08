@@ -1,14 +1,11 @@
-import { Link } from "@mui/material";
 import React from "react";
-import { Button, Footer, Navbar } from "react-bulma-components";
-import { NavLink } from "react-router-dom";
 import ProductList from "../components/ProductList";
-import Header from "../components/snippets/Header";
-// import Footer from "../components/snippets/Footer";
+import MyHeader from "../components/snippets/Header";
 
 function Home() {
   return (
     <div>
+      <MyHeader />
       <ProductList />
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import TweetButton from "../../UI/button";
 import { connect } from "react-redux";
-import { signup } from "../../actions/auth";
+import { signup } from "../../store/actions/auth";
 
 const Signup = ({ signup, isAuthenticated }) => {
   const [accountCreated, setAccountCreated] = useState(false);

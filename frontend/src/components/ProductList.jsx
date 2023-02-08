@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Container, Icon, Image, Item, Label } from "semantic-ui-react";
-// import MLoader from "../UI/Loader/Loader";
+import { Button, Container, Icon, Item, Label } from "semantic-ui-react";
 import MyLoader from "../UI/Loader/Loader";
+import { connect } from "react-redux";
+import { fetchCart } from "../store/actions/cart";
 
-const paragraph = <Image src="/images/wireframe/short-paragraph.png" />;
-
-const ProductList = () => {
+const ProductList = ({ fetchCart }) => {
   let [products, setProducts] = useState([]);
   let [isLoading, setIsLoading] = useState(false);
 
@@ -30,11 +29,24 @@ const ProductList = () => {
       .get(`${process.env.REACT_APP_API_URL}/api/products/`)
       .then((response) => {
         const allProducts = response.data;
-        // console.log("HAHAHA");
-        console.log(response.data[0]);
         setProducts(allProducts);
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleAddToCart = async (slug) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${localStorage.getItem("access")}`,
+      },
+    };
+    const body = { slug };
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}/api/add-to-cart/`, body, config)
+      .then((response) => {})
+      .catch((err) => console.log(err));
+    fetchCart();
   };
 
   return (
@@ -54,7 +66,13 @@ const ProductList = () => {
                 </Item.Meta>
                 <Item.Description>{item.description}</Item.Description>
                 <Item.Extra>
-                  <Button primary floated="right" icon labelPosition="right">
+                  <Button
+                    primary
+                    floated="right"
+                    icon
+                    labelPosition="right"
+                    onClick={() => handleAddToCart(item.slug)}
+                  >
                     Add to cart
                     <Icon name="cart plus" />
                   </Button>
@@ -81,4 +99,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default connect(null, { fetchCart })(ProductList);

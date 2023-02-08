@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import TweetButton from "../../UI/button";
 import { connect } from "react-redux";
-import { login } from "../../actions/auth";
+import { login } from "../../store/actions/auth";
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({

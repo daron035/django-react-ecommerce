@@ -9,6 +9,8 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import ResetPasswordConfirm from "./pages/auth/ResetPasswordConfirm";
 import Activate from "./pages/auth/Activate";
 import "semantic-ui-css/semantic.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 // другая реализация в index router tutorial.jsx (без App.jsx)
 function App() {
