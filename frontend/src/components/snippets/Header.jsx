@@ -3,8 +3,11 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useSelector } from "react-redux";
+import { connect } from "react-redux";
+import { logout } from "../../store/actions/auth";
+import Button from "react-bootstrap/Button";
 
-function MyHeader() {
+function MyHeader({ logout }) {
   const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated);
   const loading = useSelector((state) => state.cart?.loading);
   const cart = useSelector((state) => state.cart?.shoppingCart);
@@ -21,34 +24,41 @@ function MyHeader() {
               <Nav.Link href="#link">Link</Nav.Link>
             </Nav>
             {isAuthenticated ? (
-              <NavDropdown
-                title={`${cart !== null ? cart.order_items.length : 0} items`}
-                id="basic-nav-dropdown"
-              >
-                {cart &&
-                  cart.order_items.map((order_item) => {
-                    return (
-                      <NavDropdown.Item href="#action/3.1" key={order_item.id}>
-                        {order_item.quantity} x {order_item.item}
-                      </NavDropdown.Item>
-                    );
-                  })}
-                {cart && cart.order_items.length < 1 ? (
-                  <NavDropdown.Item href="#action/3.1">
-                    No items in cart
+              <>
+                <NavDropdown
+                  title={`${cart !== null ? cart.order_items.length : 0} items`}
+                  id="basic-nav-dropdown"
+                >
+                  {cart &&
+                    cart.order_items.map((order_item) => {
+                      return (
+                        <NavDropdown.Item
+                          href="#action/3.1"
+                          key={order_item.id}
+                        >
+                          {order_item.quantity} x {order_item.item}
+                        </NavDropdown.Item>
+                      );
+                    })}
+                  {cart && cart.order_items.length < 1 ? (
+                    <NavDropdown.Item href="#action/3.1">
+                      No items in cart
+                    </NavDropdown.Item>
+                  ) : null}
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="/order-summary">
+                    Checkout
                   </NavDropdown.Item>
-                ) : null}
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.3">Checkout</NavDropdown.Item>
-              </NavDropdown>
+                </NavDropdown>
+                <Button variant="light" onClick={logout} className="ml-4">
+                  Logout
+                </Button>{" "}
+              </>
             ) : (
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.2">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
+              <Nav>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/signup">Signup</Nav.Link>
+              </Nav>
             )}
           </Navbar.Collapse>
         </Container>
@@ -57,4 +67,5 @@ function MyHeader() {
   );
 }
 
-export default MyHeader;
+// export default MyHeader;
+export default connect(null, { logout })(MyHeader);

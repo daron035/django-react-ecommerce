@@ -9,8 +9,9 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import ResetPasswordConfirm from "./pages/auth/ResetPasswordConfirm";
 import Activate from "./pages/auth/Activate";
 import "semantic-ui-css/semantic.min.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import OrderSummary from "./components/OrderSummary";
+import ProductList from "./components/ProductList";
 
 // другая реализация в index router tutorial.jsx (без App.jsx)
 function App() {
@@ -18,7 +19,11 @@ function App() {
     <Layout>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<Home />}>
+            <Route index element={<ProductList />}></Route>
+            <Route path="/order-summary" element={<OrderSummary />}></Route>
+          </Route>
+          {/* <Route path="/order-summary" element={<OrderSummary />}></Route> */}
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
