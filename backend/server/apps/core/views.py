@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, viewsets
 from django.utils import timezone
+from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
@@ -9,10 +10,16 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.generics import RetrieveAPIView
 
 from .serializers import ItemSerializer, OrderSerializer
-from .models import Item, OrderItem, Order
+from .models import Item, OrderItem, Order, UserProfile
 
 
 class ItemListView(generics.ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+
+
+class ItemDetailView(generics.RetrieveAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
@@ -56,7 +63,10 @@ class OrderDetailView(RetrieveAPIView):
             order = Order.objects.get(user=self.request.user, ordered=False)
             return order
         except ObjectDoesNotExist:
-            return Response(
-                {"message": "You do not have an active order"},
-                status=HTTP_400_BAD_REQUEST,
-            )
+            raise Http404("You do not have an active order")
+            # return Response({"message": "You do not have an active order"}, status=HTTP_400_BAD_REQUEST)
+
+
+class PaymentView(APIView):
+    def post(self, request, *args, **kwargs):
+        return Response({"OK"}, status=HTTP_200_OK)

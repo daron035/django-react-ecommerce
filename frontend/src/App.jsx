@@ -12,6 +12,10 @@ import "semantic-ui-css/semantic.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import OrderSummary from "./components/OrderSummary";
 import ProductList from "./components/ProductList";
+// import Checkout from "./components/Checkout";
+import ProductDetail from "./components/ProductDetail";
+// import Checkout from "./components/Checkout";
+import MyCheckout from "./components/Checkout";
 
 // другая реализация в index router tutorial.jsx (без App.jsx)
 function App() {
@@ -21,7 +25,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}>
             <Route index element={<ProductList />}></Route>
+            <Route
+              path="/products/:productID"
+              element={<ProductDetail />}
+            ></Route>
             <Route path="/order-summary" element={<OrderSummary />}></Route>
+            <Route path="/checkout" element={<MyCheckout />}></Route>
           </Route>
           {/* <Route path="/order-summary" element={<OrderSummary />}></Route> */}
 

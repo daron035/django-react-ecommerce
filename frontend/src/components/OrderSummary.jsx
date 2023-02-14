@@ -1,15 +1,24 @@
+import { Link } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Table from "react-bootstrap/Table";
 import { useSelector } from "react-redux";
 import { connect } from "react-redux";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 function OrderSummary() {
   const data = useSelector((state) => state.cart?.shoppingCart);
-  console.log(data);
+  const error = useSelector((state) => state.cart?.error);
+
   return (
     <Container>
       <h1>Order Summary</h1>
+      {error && (
+        <Alert variant="danger" className="w-11/12">
+          <Alert.Heading>There was an error</Alert.Heading>
+          <p>{error} </p>
+        </Alert>
+      )}
       {data && (
         <Table striped bordered hover>
           <thead>
@@ -40,9 +49,11 @@ function OrderSummary() {
               <td></td>
               <td>{data.total}</td>
             </tr>
-            <Button variant="warning" className="mt-4">
-              Checkout
-            </Button>
+            <Link to="/checkout">
+              <Button variant="warning" className="mt-4">
+                Checkout
+              </Button>
+            </Link>
           </tbody>
         </Table>
       )}

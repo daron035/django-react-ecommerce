@@ -19,6 +19,7 @@ export const fetchCart = () => async (dispatch) => {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/order-summary/`,
+        // `http://85.193.81.247/api/order-summary/`,
         config
       );
       dispatch({
@@ -26,10 +27,17 @@ export const fetchCart = () => async (dispatch) => {
         payload: res.data,
       });
     } catch (err) {
-      dispatch({
-        type: CART_FAIL,
-        error: err.message,
-      });
+      if (err.response.status === 404) {
+        dispatch({
+          type: CART_FAIL,
+          error: "You currently do not have an order",
+        });
+      } else {
+        dispatch({
+          type: CART_FAIL,
+          error: err.message,
+        });
+      }
     }
   } else {
     dispatch({

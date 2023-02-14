@@ -7,5 +7,28 @@
   </head>
   <body>
     <div id="root"></div>
+    <script src="https://static.yoomoney.ru/checkout-js/v1/checkout.js"></script>
+    <script type="text/javascript">
+      async function test(number, cvc, month, year) {
+        const checkout = new YooMoneyCheckout(983923);
+        let response;
+        await checkout
+          .tokenize({
+            number: number,
+            cvc: cvc,
+            month: month,
+            year: year,
+          })
+          .then((res) => {
+            if (res.status === "success") {
+              const { paymentToken } = res.data.response;
+              response = paymentToken;
+            } else if (res.status === "error") {
+              response = res;
+            }
+          });
+        return response;
+      }
+    </script>
   </body>
 </html>

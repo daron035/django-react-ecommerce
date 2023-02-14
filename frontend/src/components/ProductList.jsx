@@ -8,6 +8,7 @@ import { fetchCart } from "../store/actions/cart";
 const ProductList = ({ fetchCart }) => {
   let [products, setProducts] = useState([]);
   let [isLoading, setIsLoading] = useState(false);
+  // console.log(products)
 
   useEffect(() => {
     getProducts();
@@ -27,6 +28,7 @@ const ProductList = ({ fetchCart }) => {
     // }, 2000);
     await axios
       .get(`${process.env.REACT_APP_API_URL}/api/products/`)
+      // .get(`http://85.193.81.247/api/products/`)
       .then((response) => {
         const allProducts = response.data;
         setProducts(allProducts);
@@ -44,6 +46,7 @@ const ProductList = ({ fetchCart }) => {
     const body = { slug };
     await axios
       .post(`${process.env.REACT_APP_API_URL}/api/add-to-cart/`, body, config)
+      // .post(`http://85.193.81.247/api/add-to-cart/`, body, config)
       .then((response) => {})
       .catch((err) => console.log(err));
     fetchCart();
