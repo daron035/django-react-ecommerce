@@ -10,7 +10,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.generics import RetrieveAPIView
 
 from .serializers import ItemSerializer, OrderSerializer
-from .models import Item, OrderItem, Order, UserProfile
+from .models import Item, OrderItem, Order, Coupon, UserProfile
 
 
 class ItemListView(generics.ListAPIView):
@@ -70,3 +70,17 @@ class OrderDetailView(RetrieveAPIView):
 class PaymentView(APIView):
     def post(self, request, *args, **kwargs):
         return Response({"OK"}, status=HTTP_200_OK)
+
+
+class AddCouponView(APIView):
+    def post(self, request, *args, **kwargs):
+        code = request.data.get("code", None)
+        if code is None:
+            return Response(
+                {"message": "Invalid data received"}, status=HTTP_400_BAD_REQUEST
+            )
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        coupon = get_object_or_404(Coupon, code=code)
+        order.coupon = coupon
+        order.save()
+        return Response(status=HTTP_200_OK)

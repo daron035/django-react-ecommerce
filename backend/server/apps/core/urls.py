@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    AddCouponView,
     ItemListView,
     ItemDetailView,
     AddToCartView,
@@ -19,4 +20,5 @@ core_urlpatterns = [
         "api/order-summary/", OrderDetailView.as_view(), name="order-summary"
     ),  # fetchCart for redux
     path("api/checkout/", PaymentView.as_view(), name="checkout"),
+    path("api/add-coupon/", AddCouponView.as_view(), name="add-coupon"),
 ]

@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Table from "react-bootstrap/Table";
 import { useSelector } from "react-redux";
-import { connect } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import MyLoader from "../UI/Loader/Loader";
 
 function OrderSummary() {
   const data = useSelector((state) => state.cart?.shoppingCart);
   const error = useSelector((state) => state.cart?.error);
+  const loading = useSelector((state) => state.cart?.loading);
 
   return (
     <Container>
@@ -19,6 +20,7 @@ function OrderSummary() {
           <p>{error} </p>
         </Alert>
       )}
+      {loading && <MyLoader />}
       {data && (
         <Table striped bordered hover>
           <thead>
