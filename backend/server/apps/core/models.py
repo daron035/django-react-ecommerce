@@ -45,7 +45,8 @@ class Item(models.Model):
 
 class Variation(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)  # size
+    # category = models.CharField(choices=CATEGORY_CHOICES, max_length=2, null=True)
+    name = models.CharField(max_length=50)  # size, colour
 
     class Meta:
         unique_together = ("item", "name")

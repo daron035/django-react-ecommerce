@@ -4,6 +4,7 @@ import { Button, Container, Icon, Item, Label } from "semantic-ui-react";
 import MyLoader from "../UI/Loader/Loader";
 import { connect } from "react-redux";
 import { fetchCart } from "../store/actions/cart";
+import { Link } from "react-router-dom";
 
 const ProductList = ({ fetchCart }) => {
   let [products, setProducts] = useState([]);
@@ -63,7 +64,9 @@ const ProductList = ({ fetchCart }) => {
               <Item.Image src={item.image} />
 
               <Item.Content>
-                <Item.Header as="a">{item.title}</Item.Header>
+                <Link to={`/products/${item.id}`}>
+                  <Item.Header as="a">{item.title}</Item.Header>
+                </Link>
                 <Item.Meta>
                   <span className="cinema">{item.category}</span>
                 </Item.Meta>

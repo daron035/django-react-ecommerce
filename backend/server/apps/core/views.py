@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.generics import RetrieveAPIView
 
-from .serializers import ItemSerializer, OrderSerializer
+from .serializers import ItemSerializer, OrderSerializer, ItemDetailSerializer
 from .models import Item, OrderItem, Order, Coupon, UserProfile
 
 
@@ -21,7 +21,7 @@ class ItemListView(generics.ListAPIView):
 
 class ItemDetailView(generics.RetrieveAPIView):
     permission_classes = (AllowAny,)
-    serializer_class = ItemSerializer
+    serializer_class = ItemDetailSerializer
     queryset = Item.objects.all()
 
 

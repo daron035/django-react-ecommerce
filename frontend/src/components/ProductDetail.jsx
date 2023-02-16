@@ -1,56 +1,46 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import { Button, Container, Icon, Item, Label } from "semantic-ui-react";
+import { useSelector } from "react-redux";
 import {
   Button,
   Card,
   Container,
-  Dimmer,
-  Form,
   Grid,
-  Header,
   Icon,
-  Image,
   Item,
   Label,
-  Loader,
-  Message,
-  Segment,
-  Select,
-  Divider
+  Header,
 } from "semantic-ui-react";
 import MyLoader from "../UI/Loader/Loader";
+import Alert from "react-bootstrap/Alert";
 import { connect } from "react-redux";
 import { fetchCart } from "../store/actions/cart";
+import { useParams } from "react-router-dom";
 import { productDetailURL } from "../contacts";
-import { Routes, Route, useParams } from 'react-router-dom';
 
 const ProductDetail = ({ fetchCart }) => {
-  let [data, setProducts] = useState();
-  let [isLoading, setIsLoading] = useState(false);
-  // console.log(data)
-  // console.log(data.id)
-  // const data = item;
+  const data = useSelector((state) => state.cart?.shoppingCart);
+  let [product, setProduct] = useState();
+  let [isLoading, setLoading] = useState();
+  let [error, setError] = useState();
 
-  let { productID } = useParams();
-  // console.log(productID)
+  const { productID } = useParams();
 
   useEffect(() => {
-    getProducts();
+    getProductDetail();
   }, []);
 
-  let getProducts = async () => {
-    setIsLoading(true);
+  let getProductDetail = async () => {
+    setLoading(true);
     await axios
       .get(productDetailURL(productID))
-      // .get(`http://85.193.81.247/api/products/`)
-      .then((response) => {
-        const allProducts = response.data;
-        // console.log(allProducts)
-        setProducts(allProducts);
+      // .get(`http://85.193.81.247/api/products/${productID}/`)
+      .then((res) => {
+        const response = res.data;
+        setProduct(response);
+        setLoading(false);
       })
-      .then(setIsLoading(false))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err), setLoading(false));
   };
 
   const handleAddToCart = async (slug) => {
@@ -70,97 +60,92 @@ const ProductDetail = ({ fetchCart }) => {
   };
 
   return (
-    // <Container>
-    //   {isLoading ? (
-    //     <MyLoader />
-    //   ) : (
-
-        // <Item.Group divided>
-        //     {/* <Item key={item.id}> */}
-        //     <Item key="1">
-        //       {/* <Item.Image src={item.image} /> */}
-
-        //       <Item.Content>
-        //         {/* <Item.Header as="a">{item.title}</Item.Header> */}
-        //         <Item.Meta>
-        //           {/* <span className="cinema">{item.category}</span> */}
-        //         </Item.Meta>
-        //         {/* <Item.Description>{item.description}</Item.Description> */}
-        //         <Item.Extra>
-        //           <Button
-        //             primary
-        //             floated="right"
-        //             icon
-        //             labelPosition="right"
-        //             // onClick={() => handleAddToCart(item.slug)}
-        //           >
-        //             Add to cart
-        //             <Icon name="cart plus" />
-        //           </Button>
-        //           {/* {item.discount_price && (
-        //             <Label
-        //               color={
-        //                 item.label === "primary"
-        //                   ? "blue"
-        //                   : item.label === "secondary"
-        //                   ? "green"
-        //                   : "olive"
-        //               }
-        //             >
-        //               {item.category}
-        //             </Label>
-        //           )} */}
-        //         </Item.Extra>
-        //       </Item.Content>
-        //     </Item>
-        // </Item.Group>
-    //   )}
-    // </Container>
     <Container>
-    {isLoading && (
-      <h1>LOADING</h1>
-    )}
-    {data && (
-      <Item.Group divided>
-            <Item key={data.id}>
-            {/* <Item key="1"> */}
-              <Item.Image src={data.image} />
-
-              <Item.Content>
-                <Item.Header as="a">{data.title}</Item.Header>
-                <Item.Meta>
-                  <span className="cinema">{data.category}</span>
-                </Item.Meta>
-                <Item.Description>{data.description}</Item.Description>
-                <Item.Extra>
-                  <Button
-                    primary
-                    floated="right"
-                    icon
-                    labelPosition="right"
-                    // onClick={() => handleAddToCart(data.slug)}
-                  >
-                    Add to cart
-                    <Icon name="cart plus" />
-                  </Button>
-                  {data.discount_price && (
-                    <Label
-                      color={
-                        data.label === "primary"
-                          ? "blue"
-                          : data.label === "secondary"
-                          ? "green"
-                          : "olive"
-                      }
+      {error && (
+        <Alert variant="danger" className="w-11/12">
+          <Alert.Heading>There was an error</Alert.Heading>
+          <p>{error} </p>
+        </Alert>
+      )}
+      {isLoading && <MyLoader />}
+      {product && (
+        <Grid columns={2} divided>
+          <Grid.Row>
+            <Grid.Column>
+              <Card
+                fluid
+                image={product.image}
+                header={product.title}
+                meta={
+                  <React.Fragment>
+                    {product.category}
+                    {product.discount_price && (
+                      <Label
+                        color={
+                          product.label === "primary"
+                            ? "blue"
+                            : product.label === "secondary"
+                            ? "green"
+                            : "olive"
+                        }
+                      >
+                        {product.category}
+                      </Label>
+                    )}
+                  </React.Fragment>
+                }
+                description={product.category}
+                extra={
+                  <React.Fragment>
+                    <Button
+                      fluid
+                      color="yellow"
+                      floated="right"
+                      icon
+                      labelPosition="right"
+                      onClick={() => handleAddToCart(product.slug)}
                     >
-                      {data.category}
-                    </Label>
-                  )}
-                </Item.Extra>
-              </Item.Content>
-            </Item>
-        </Item.Group>
-    )}
+                      Add to cart
+                      <Icon name="cart plus" />
+                    </Button>
+                  </React.Fragment>
+                }
+              />
+            </Grid.Column>
+            <Grid.Column>
+            <Header as="h2">Try different variations</Header>
+              
+              {product.variations &&
+                product.variations.map((v) => {
+                  return (
+                    <React.Fragment>
+                    
+                    <Header as="h2">{v.name}</Header>
+                    <Item.Group divided key={v.id}>
+                      {v.item_variations.map((iv) => {
+                        return (
+
+                          <Item key={iv.id}>
+                          {iv.attachment && (
+                            <Item.Image
+                              size="tiny"
+                              src={`http://127.0.0.1:8000${iv.attachment}`}
+                            />
+                            )}
+                            <Item.Content verticalAlign="middle">
+                              {iv.value}
+                            </Item.Content>
+                          </Item>
+                        );
+                      })}
+                    </Item.Group>
+                    </React.Fragment>
+                  );
+                })}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      )}
     </Container>
   );
 };
