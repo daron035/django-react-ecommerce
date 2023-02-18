@@ -36,7 +36,7 @@ function MyHeader({ logout }) {
                           href="#action/3.1"
                           key={order_item.id}
                         >
-                          {order_item.quantity} x {order_item.item}
+                          {order_item.quantity} x {order_item.item.title}
                         </NavDropdown.Item>
                       );
                     })}

@@ -5,11 +5,15 @@ import {
   Button,
   Card,
   Container,
+  Dropdown,
   Grid,
   Icon,
   Item,
   Label,
   Header,
+  Form,
+  Divider,
+  Select,
 } from "semantic-ui-react";
 import MyLoader from "../UI/Loader/Loader";
 import Alert from "react-bootstrap/Alert";
@@ -22,6 +26,8 @@ const ProductDetail = ({ fetchCart }) => {
   const data = useSelector((state) => state.cart?.shoppingCart);
   let [product, setProduct] = useState();
   let [isLoading, setLoading] = useState();
+  let [formVisible, setFormVisible] = useState(false);
+  let [formData, setFormData] = useState();
   let [error, setError] = useState();
 
   const { productID } = useParams();
@@ -29,6 +35,16 @@ const ProductDetail = ({ fetchCart }) => {
   useEffect(() => {
     getProductDetail();
   }, []);
+
+  const handleToggleForm = () => {
+    setFormVisible(!formVisible)
+  }
+
+  const handleChange = (e, {name, value}) => {
+    setFormData({...formData, [name]: value, })
+    console.log(name)
+    console.log(value)
+  }
 
   let getProductDetail = async () => {
     setLoading(true);
@@ -43,6 +59,12 @@ const ProductDetail = ({ fetchCart }) => {
       .catch((err) => console.log(err), setLoading(false));
   };
 
+  const handleFormatData = formData => {
+    return Object.keys(formData).map(key => {
+      return formData[key];
+    })
+  }
+
   const handleAddToCart = async (slug) => {
     const config = {
       headers: {
@@ -50,7 +72,9 @@ const ProductDetail = ({ fetchCart }) => {
         Authorization: `JWT ${localStorage.getItem("access")}`,
       },
     };
-    const body = { slug };
+    const variations = handleFormatData(formData)
+    console.log(variations)
+    const body = { slug, variations };
     await axios
       .post(`${process.env.REACT_APP_API_URL}/api/add-to-cart/`, body, config)
       // .post(`http://85.193.81.247/api/add-to-cart/`, body, config)
@@ -103,7 +127,7 @@ const ProductDetail = ({ fetchCart }) => {
                       floated="right"
                       icon
                       labelPosition="right"
-                      onClick={() => handleAddToCart(product.slug)}
+                      onClick={handleToggleForm}
                     >
                       Add to cart
                       <Icon name="cart plus" />
@@ -111,6 +135,41 @@ const ProductDetail = ({ fetchCart }) => {
                   </React.Fragment>
                 }
               />
+              {formVisible && (
+                <React.Fragment>
+                <Divider/>
+              <Form>
+                {product.variations.map(v =>{
+                  const name = v.name.toLowerCase();
+                  return (
+                    <Form.Field key={v.id}>
+                  <Select
+                    name={name}
+                    onChange={handleChange}
+                    options={v.item_variations.map(item => {
+                      return {
+                        key: item.id,
+                        text: item.value,
+                        value: item.id
+                      }
+                    })}
+                    placeholder={`Choose a ${name}`}
+                    selection
+                    // value={formData[name] && (formData[name])}
+                    // value={formData[name]}
+                  />
+                </Form.Field>
+                  )
+                })}
+                
+                <Form.Button
+                primary
+                onClick={() => handleAddToCart(product.slug)}>
+                  Submit
+                </Form.Button>
+              </Form>
+              </React.Fragment>
+              )}
             </Grid.Column>
             <Grid.Column>
             <Header as="h2">Try different variations</Header>
@@ -118,10 +177,10 @@ const ProductDetail = ({ fetchCart }) => {
               {product.variations &&
                 product.variations.map((v) => {
                   return (
-                    <React.Fragment>
+                    <React.Fragment key={v.id}>
                     
                     <Header as="h2">{v.name}</Header>
-                    <Item.Group divided key={v.id}>
+                    <Item.Group divided>
                       {v.item_variations.map((iv) => {
                         return (
 

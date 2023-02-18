@@ -11,6 +11,14 @@ function OrderSummary() {
   const error = useSelector((state) => state.cart?.error);
   const loading = useSelector((state) => state.cart?.loading);
 
+  const renderVariations = orderItem => {
+    let text = '';
+    orderItem.item_variations.forEach(iv => {
+      text += `${iv.variation.name}: ${iv.value}, `
+    })
+    return text;
+  }
+
   return (
     <Container>
       <h1>Order Summary</h1>
@@ -37,8 +45,8 @@ function OrderSummary() {
               return (
                 <tr key={order_item.id}>
                   <td>{index + 1}</td>
-                  <td>{order_item.item}</td>
-                  <td>${order_item.item_obj.price}</td>
+                  <td>{order_item.item.title} - {renderVariations(order_item)}</td>
+                  <td>${order_item.item.price}</td>
                   <td>{order_item.quantity}</td>
                   <td>${order_item.final_price}</td>
                 </tr>
@@ -49,7 +57,7 @@ function OrderSummary() {
               <td></td>
               <td></td>
               <td></td>
-              <td>{data.total}</td>
+              <td>Order Total: ${data.total}</td>
             </tr>
             <Link to="/checkout">
               <Button variant="warning" className="mt-4">

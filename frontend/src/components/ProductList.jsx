@@ -72,7 +72,7 @@ const ProductList = ({ fetchCart }) => {
                 </Item.Meta>
                 <Item.Description>{item.description}</Item.Description>
                 <Item.Extra>
-                  <Button
+                  {/* <Button
                     primary
                     floated="right"
                     icon
@@ -81,7 +81,7 @@ const ProductList = ({ fetchCart }) => {
                   >
                     Add to cart
                     <Icon name="cart plus" />
-                  </Button>
+                  </Button> */}
                   {item.discount_price && (
                     <Label
                       color={

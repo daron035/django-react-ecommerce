@@ -39,31 +39,17 @@ const OrderPreview = () => {
                 <Item key={index}>
                   <Item.Image
                     size="tiny"
-                    src={`http://127.0.0.1:8000${order_item.item_obj.image}`}
+                    src={`http://127.0.0.1:8000${order_item.item.image}`}
                   />
                   <Item.Content verticalAlign="middle">
                     <Item.Header as="a">
-                      {order_item.quantity} x {order_item.item_obj.title}
+                      {order_item.quantity} x {order_item.item.title}
                     </Item.Header>
                     <Item.Extra>
                       <Label>${order_item.final_price}</Label>
                     </Item.Extra>
                   </Item.Content>
                 </Item>
-                // <Table.Row key={order_item.id}>
-                //   <Table.Cell>{index + 1}</Table.Cell>
-                //   <Table.Cell>{order_item.item_obj.title}</Table.Cell>
-                //   <Table.Cell>{order_item.item_obj.price}</Table.Cell>
-                //   <Table.Cell>{order_item.quantity}</Table.Cell>
-                //   <Table.Cell>
-                //     {order_item.item_obj.discount_price && (
-                //       <Label color="green" ribbon>
-                //         ON DISCOUNTJK
-                //       </Label>
-                //     )}
-                //     ${order_item.final_price}
-                //   </Table.Cell>
-                // </Table.Row>
               );
             })}
           </Item.Group>
